@@ -1,4 +1,4 @@
-#PHP-tic-tac-toe
+##PHP-tic-tac-toe
 
 Written by Adrián muszik 
 for practice and job application
