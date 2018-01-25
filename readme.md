@@ -26,5 +26,6 @@ run the following code
 - [ ] Unit test the frontend!
 - [ ] More backend unit test
 - [ ] Use an actual Frondend framework
+- [ ] Create Vangrantfile too
 
 basicallythings that i ran out of time to do. 
