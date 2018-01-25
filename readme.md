@@ -12,7 +12,7 @@ run the following code
 - [x] NxN grid
 - [x] user plays against the bot
 - [x] Simple frontend to play the game
-- [x]No database! yay!
+- [x] No database! yay!
 
 ### what i used
 * Composer
