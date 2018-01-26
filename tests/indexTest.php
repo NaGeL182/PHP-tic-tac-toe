@@ -1,8 +1,10 @@
 <?php
+namespace doclerPHP\Tests;
+
 use PHPUnit\Framework\TestCase;
 use Silex\WebTestCase;
 
-final class indexTest extends WebTestCase
+final class IndexTest extends WebTestCase
 {
     private $ch;
 
@@ -23,8 +25,6 @@ final class indexTest extends WebTestCase
         curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($this->ch, CURLOPT_HEADER, false);
         curl_setopt($this->ch, CURLOPT_VERBOSE, false);
-        //still cant hide cURL output on the test...
-
     }
 
     private function closeCURL()
@@ -38,10 +38,10 @@ final class indexTest extends WebTestCase
         $crawler = $client->request('GET', '/api');
         $this->assertTrue($client->getResponse()->isOk());
         $this->assertEquals('{"version":"1.0.0"}', $client->getResponse()->getContent());
-
     }
 
-    public function testdefaultNewGameEndpoint() {
+    public function testdefaultNewGameEndpoint()
+    {
         $this->setupCURL("http://localhost/newgame");
         $data = curl_exec($this->ch);
         $this->assertNotFalse($data);
@@ -53,7 +53,8 @@ final class indexTest extends WebTestCase
         $this->assertCount(3, $data["board"]);
     }
 
-    public function testNewGameEndpointWithBoardSizeIs5() {
+    public function testNewGameEndpointWithBoardSizeIs5()
+    {
         $this->setupCURL("http://localhost/newgame/5");
         $data = curl_exec($this->ch);
         $this->assertNotFalse($data);
@@ -65,7 +66,8 @@ final class indexTest extends WebTestCase
         $this->assertCount(5, $data["board"]);
     }
 
-    public function testNewGameEndpointWithBadArg() {
+    public function testNewGameEndpointWithBadArg()
+    {
         $this->setupCURL("http://localhost/newgame/bah");
         $data = curl_exec($this->ch);
         $this->assertNotFalse($data);
@@ -73,7 +75,9 @@ final class indexTest extends WebTestCase
         $this->closeCURL();
         $this->assertEquals(404, $info["http_code"]);
     }
-    public function testNewGameEndpointWithBoardSizeLessThan3() {
+
+    public function testNewGameEndpointWithBoardSizeLessThan3()
+    {
         $this->setupCURL("http://localhost/newgame/1");
         $data = curl_exec($this->ch);
         $this->assertNotFalse($data);
@@ -85,9 +89,10 @@ final class indexTest extends WebTestCase
     }
 
     /**
-     * @dataProvider NoWinDataProvider
+     * @dataProvider noWinDataProvider
      */
-    public function testMoveEndpointwithDataNoWin($data){
+    public function testMoveEndpointwithDataNoWin($data)
+    {
         $this->setupCURL("http://localhost/move");
         curl_setopt($this->ch, CURLOPT_POST, 1);
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, http_build_query($data));
@@ -96,19 +101,17 @@ final class indexTest extends WebTestCase
         $data = json_decode($data, true);
         $this->assertArrayNotHasKey("error", $data);
         $this->assertFalse($data["over"]);
-
-
     }
 
-    public function NoWinDataProvider()
+    public function noWinDataProvider()
     {
         return [
             "emptyBoard" => [
                 [
                     "player" => "X",
                     "board" => [
-                                [false,false, false], 
-                                [false, false, false], 
+                                [false,false, false],
+                                [false, false, false],
                                 [false, false, false]
                     ],
                     "boardSize" => 3
@@ -118,8 +121,8 @@ final class indexTest extends WebTestCase
                 [
                     "player" => "X",
                     "board" => [
-                                ["X",false, false], 
-                                [false, "O", false], 
+                                ["X",false, false],
+                                [false, "O", false],
                                 [false, false, false]
                     ],
                     "boardSize" => 3

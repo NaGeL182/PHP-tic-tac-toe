@@ -5,8 +5,8 @@ use \Silex\Application;
 use \Symfony\Component\HttpFoundation\Request;
 use \doclerPHP\Game\Board;
 
-
-class Routes {
+class Routes
+{
 
     public function api(Request $request, Application $app)
     {

@@ -1,4 +1,6 @@
 <?php
+namespace doclerPHP\Tests;
+
 use PHPUnit\Framework\TestCase;
 use \doclerPHP\Game\Board;
 
@@ -39,10 +41,9 @@ final class BoardTest extends TestCase
 
     public function testNewGameWithBadArgument()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
         $game = new Board();
         $new = $game->newGame("badargument");
-
     }
 
     public function testMoveWithNoData()
@@ -147,7 +148,6 @@ final class BoardTest extends TestCase
         $this->assertEquals(false, $data["over"]);
         $this->assertEquals("X", $data["player"]);
         $this->assertCount(3, $data["board"]);
-        
     }
 
     public function testMoveCheckTotalMoves()
@@ -161,13 +161,14 @@ final class BoardTest extends TestCase
         $this->assertEquals(4, $data["totalMoves"]);
     }
 
-    public function testXWon() {
+    public function testXWon()
+    {
         $request = [
             "boardSize" => 3,
             "player" => "X",
             "board" => [
-                ["X","X", "X"], 
-                [false, false, false], 
+                ["X","X", "X"],
+                [false, false, false],
                 [false, false, false]
             ]
         ];
@@ -177,13 +178,14 @@ final class BoardTest extends TestCase
         $this->assertEquals("X", $data["winner"]);
     }
 
-    public function testOWon() {
+    public function testOWon()
+    {
         $request = [
             "boardSize" => 3,
             "player" => "O",
             "board" => [
-                ["O","O", "O"], 
-                [false, false, false], 
+                ["O","O", "O"],
+                [false, false, false],
                 [false, false, false]
             ]
         ];
@@ -213,50 +215,50 @@ final class BoardTest extends TestCase
     {
         return [
             "no_more_move" => [[
-                ["O","O", "X"], 
-                ["X", "X", "O"], 
+                ["O","O", "X"],
+                ["X", "X", "O"],
                 ["O", "X", "X"]
             ]],
             "first_row_X" => [[
-                ["X","X", "X"], 
-                [false, false, false], 
-                [false, false, false]
+                ["X","X", "X"],
+                [false, false, false],
+                [false, false, false],
             ]],
             "second_row_X" => [[
-                [false,false, false], 
-                ["X","X", "X"], 
+                [false,false, false],
+                ["X","X", "X"],
                 [false, false, false]
             ]],
             "third_row_O" => [[
-                [false,false, false], 
-                [false, false, false], 
+                [false,false, false],
+                [false, false, false],
                 ["O","O", "O"]
             ]],
             "left_to_right_diag_X" => [[
-                ["X",false, false], 
-                [false, "X", false], 
+                ["X",false, false],
+                [false, "X", false],
                 [false, false, "X"]
             ]],
             "right_to_left_diag_O" => [[
-                [false,false, "O"], 
-                [false, "O", false], 
+                [false,false, "O"],
+                [false, "O", false],
                 ["O", false, false]
             ]],
             "fir_column_X" => [[
-                ["X",false, false], 
-                ["X", false, false], 
+                ["X",false, false],
+                ["X", false, false],
                 ["X", false, false]
             ]],
-            "left_to_right_diag_X_large" => [[  
-                ["X", false, false, false, false], 
-                [false, "X", false, false, false], 
+            "left_to_right_diag_X_large" => [[
+                ["X", false, false, false, false],
+                [false, "X", false, false, false],
                 [false, false, "X", false, false],
                 [false, false, false, "X", false],
                 [false, false, false, false, "X"]
             ]],
-            "right_to_left_diag_O_large" => [[  
-                [false, false, false, false, "O"], 
-                [false, false, false, "O", false], 
+            "right_to_left_diag_O_large" => [[
+                [false, false, false, false, "O"],
+                [false, false, false, "O", false],
                 [false, false, "O", false, false],
                 [false, "O", false, false, false],
                 ["O", false, false, false, false]

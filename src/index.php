@@ -1,5 +1,6 @@
 <?php
 namespace doclerPHP;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 $app = new \Silex\Application();

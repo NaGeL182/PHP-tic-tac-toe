@@ -3,7 +3,7 @@ namespace doclerPHP\Game;
 
 use \doclerPHP\Game\Bot;
 
-class Board 
+class Board
 {
     private $player;
     private $board;
@@ -27,8 +27,7 @@ class Board
     public function move($gameData)
     {
         $validity = $this->checkGameDataValidity($gameData);
-        if ($validity !== true)
-        {
+        if ($validity !== true) {
             return $validity;
         }
         $this->setupBoard($gameData);
@@ -38,15 +37,12 @@ class Board
         }
         $bot = new Bot();
         $move = $bot->makeMove($this->board);
-        if (\array_key_exists("error", $move))
-        {
+        if (\array_key_exists("error", $move)) {
             return ["error" => "Bot cant make a move!"];
         }
-        if ($this->player == "X")
-        {
+        if ($this->player == "X") {
             $this->board[$move[0]][$move[1]] = "O";
-        } else 
-        {
+        } else {
             $this->board[$move[0]][$move[1]] = "X";
         }
         $this->increaseTotalMoves();
@@ -70,7 +66,8 @@ class Board
         $this->totalMoves += $amount;
     }
 
-    public function setupBoard($gameData) {
+    public function setupBoard($gameData)
+    {
         $this->player = $gameData["player"];
         $this->board = $gameData["board"];
         $this->boardSize = $gameData["boardSize"];
@@ -80,20 +77,18 @@ class Board
         $this->won = false;
     }
 
-    private function newBoard(int $size) 
+    private function newBoard(int $size)
     {
         $this->boardSize = $size;
-        for ($x = 0; $x < $size; $x++)
-        {
+        for ($x = 0; $x < $size; $x++) {
             $this->board[$x] = [];
-            for ($y = 0; $y < $size; $y++)
-            {
+            for ($y = 0; $y < $size; $y++) {
                 $this->board[$x][$y] = false;
             }
         }
     }
 
-    private function returnState() 
+    private function returnState()
     {
         $state = [];
         $state["winner"] = $this->won;
@@ -111,12 +106,11 @@ class Board
         $this->won = $winner;
     }
 
-    private function calculateTotalMoves(){
+    private function calculateTotalMoves()
+    {
         $total = 0;
-        for ($x = 0; $x < $this->boardSize; $x++)
-        {
-            for ($y = 0; $y < $this->boardSize; $y++)
-            {
+        for ($x = 0; $x < $this->boardSize; $x++) {
+            for ($y = 0; $y < $this->boardSize; $y++) {
                 if ($this->board[$x][$y] != false) {
                     $total++;
                 }
@@ -125,46 +119,36 @@ class Board
         return $total;
     }
 
-    private function checkGameDataValidity($gameData) 
+    private function checkGameDataValidity($gameData)
     {
-        if (!\array_key_exists("boardSize", $gameData))
-        {
+        if (!\array_key_exists("boardSize", $gameData)) {
             return ["error" => "No BoardSize"];
         }
-        if (!\array_key_exists("board", $gameData))
-        {
+        if (!\array_key_exists("board", $gameData)) {
             return ["error" => "No Board"];
         }
-        if (!\array_key_exists("player", $gameData))
-        {
+        if (!\array_key_exists("player", $gameData)) {
             return ["error" => "No player"];
         }
-        if (!\is_int($gameData["boardSize"]))
-        {
+        if (!\is_int($gameData["boardSize"])) {
             return ["error" => "boardSize is not a number!"];
         }
-        if (!\is_array($gameData["board"]))
-        {
+        if (!\is_array($gameData["board"])) {
             return ["error" => "board is not an arrray!"];
         }
-        if (!\is_string($gameData["player"]))
-        {
+        if (!\is_string($gameData["player"])) {
             return ["error" => "player is not an string!"];
         }
-        if  (mb_strtolower($gameData["player"]) != "x" && mb_strtolower($gameData["player"]) != "o")
-        {
+        if (mb_strtolower($gameData["player"]) != "x" && mb_strtolower($gameData["player"]) != "o") {
             return ["error" => "playeris nota valid mark! (X, O)"];
         }
-        if ($gameData["boardSize"] != \count($gameData["board"]))
-        {
+        if ($gameData["boardSize"] != \count($gameData["board"])) {
             return ["error" => "the board size and boardSize is not equal!"];
         }
-        for ($x = 0; $x < $gameData["boardSize"]; $x++)
-        {
-            if ($gameData["boardSize"] != \count($gameData["board"][$x]))
-            {
+        for ($x = 0; $x < $gameData["boardSize"]; $x++) {
+            if ($gameData["boardSize"] != \count($gameData["board"][$x])) {
                 return ["error" => "the board size and boardSize is not equal!"];
-            } 
+            }
         }
         return true;
     }
@@ -172,10 +156,8 @@ class Board
     private function checkAndSetGameResults()
     {
         //check row
-        for ($x = 0; $x < $this->boardSize; $x++)
-        {
-            if (\count(\array_unique($this->board[$x])) === 1 && $this->board[$x][0] !== false)
-            {
+        for ($x = 0; $x < $this->boardSize; $x++) {
+            if (\count(\array_unique($this->board[$x])) === 1 && $this->board[$x][0] !== false) {
                 //this row is the winner
                 $this->setGameOverStat(\array_unique($this->board[$x])[0]);
                 return;
@@ -183,12 +165,10 @@ class Board
         }
 
         //check column
-        for ($x = 0; $x < $this->boardSize; $x++)
-        {
+        for ($x = 0; $x < $this->boardSize; $x++) {
             $column = \array_column($this->board, $x);
 
-            if (\count(\array_unique($column)) === 1 && $column[0] !== false)
-            {
+            if (\count(\array_unique($column)) === 1 && $column[0] !== false) {
                 //this row is the winner
                 $this->setGameOverStat(\array_unique($column)[0]);
                 return;
@@ -197,12 +177,10 @@ class Board
 
         // check lefttop to right bottom diagonal
         $diagonal = [];
-        for ($x = 0; $x < $this->boardSize; $x++)
-        {
+        for ($x = 0; $x < $this->boardSize; $x++) {
             $diagonal[] = $this->board[$x][$x];
         }
-        if (\count(\array_unique($diagonal)) === 1 && $diagonal[0] !== false)
-        {
+        if (\count(\array_unique($diagonal)) === 1 && $diagonal[0] !== false) {
             //this row is the winner
             $this->setGameOverStat(\array_unique($diagonal)[0]);
             return;
@@ -211,13 +189,11 @@ class Board
         // check right top to left bottom diagonal
         $diagonal = [];
         $y = $this->boardSize -1;
-        for ($x = 0; $x < $this->boardSize; $x++)
-        {
+        for ($x = 0; $x < $this->boardSize; $x++) {
             $diagonal[] = $this->board[$x][$y];
             $y--;
         }
-        if (\count(\array_unique($diagonal)) === 1 && $diagonal[0] !== false)
-        {
+        if (\count(\array_unique($diagonal)) === 1 && $diagonal[0] !== false) {
             //this row is the winner
             $this->setGameOverStat(\array_unique($diagonal)[0]);
             return;

@@ -1,4 +1,7 @@
 <?php
+
+namespace doclerPHP\Tests;
+
 use PHPUnit\Framework\TestCase;
 use \doclerPHP\Game\Bot;
 

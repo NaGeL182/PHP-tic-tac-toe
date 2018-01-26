@@ -1,7 +1,8 @@
 <?php
 namespace doclerPHP\Game;
 
-class Bot {
+class Bot
+{
     private $board;
     private $possibleMoves;
     private $chosenMove;
@@ -18,12 +19,9 @@ class Bot {
     {
         //geta list of all available move
         $this->possibleMoves = [];
-        foreach ($this->board as $xkey => $x) 
-        {
-            foreach ($x as $ykey => $y) 
-            {
-                if ($y == false) 
-                {
+        foreach ($this->board as $xkey => $x) {
+            foreach ($x as $ykey => $y) {
+                if ($y == false) {
                     $this->possibleMoves[] = [$xkey, $ykey];
                 }
             }
@@ -35,7 +33,7 @@ class Bot {
         $count = count($this->possibleMoves);
         if ($count === 0) {
             $this->chosenMove = ["error" => "no moves left"];
-        } else if ($count === 1){
+        } elseif ($count === 1) {
             $this->chosenMove = $this->possibleMoves[0];
         } else {
             $this->chosenMove = $this->possibleMoves[\random_int(0, count($this->possibleMoves)-1)];
