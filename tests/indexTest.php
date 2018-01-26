@@ -1,9 +1,19 @@
 <?php
 use PHPUnit\Framework\TestCase;
+use Silex\WebTestCase;
 
-final class indexTest extends TestCase
+final class indexTest extends WebTestCase
 {
     private $ch;
+
+    public function createApplication()
+    {
+        // app.php must return an Application instance
+        $app = require __DIR__.'/../src/index.php';
+        $app["debug"] = true;
+        unset($app['exception_handler']);
+        return $app;
+    }
 
     private function setupCURL(string $URL)
     {
@@ -24,10 +34,10 @@ final class indexTest extends TestCase
 
     public function testAPIEndpoint()
     {
-        $this->setupCURL("http://localhost/api");
-        $data = curl_exec($this->ch);
-        $this->closeCURL();
-        $this->assertEquals('{"version":"1.0.0"}', $data);
+        $client = $this->createClient();
+        $crawler = $client->request('GET', '/api');
+        $this->assertTrue($client->getResponse()->isOk());
+        $this->assertEquals('{"version":"1.0.0"}', $client->getResponse()->getContent());
 
     }
 

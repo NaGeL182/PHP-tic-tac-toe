@@ -29,3 +29,10 @@ run the following code
 - [ ] Create Vangrantfile too
 
 basicallythings that i ran out of time to do. 
+
+### Changelog
+#### 2018-01-26
+* Added Code Coverage report to phpunit.xml  
+    it will now put html report under tests/report
+* Founda better way to test Silex app that includes into the test coverage
+* Still need to implement everyRoute tho....

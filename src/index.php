@@ -17,5 +17,5 @@ $app->get('/newgame/{boardSize}', 'doclerPHP\\API\\Routes::newgame')
     ->value('boardSize', 3)
     ->assert('boardSize', '\d+');
 $app->post('/move', 'doclerPHP\\API\\Routes::move');
-$app['debug'] = true;
 $app->run();
+return $app;
