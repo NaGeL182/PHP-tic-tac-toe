@@ -37,6 +37,16 @@ class Game
         $this->bot = $bot;
     }
 
+    /**
+     * Returns Bot Object
+     *
+     * @return BotInterface
+     */
+    public function getBot()
+    {
+        return $this->bot;
+    }
+
     public function newGame(int $size = 3)
     {
         if ($size < 3) {
@@ -60,7 +70,7 @@ class Game
         }
         $move = $this->bot->makeMove($this->board);
         if (\array_key_exists("error", $move)) {
-            return ["error" => "Bot cant make a move!"];
+            return $move;
         }
         if ($this->player == "X") {
             $this->board[$move[0]][$move[1]] = "O";

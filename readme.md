@@ -46,4 +46,5 @@ Here i list the places i submited this code to where and when
 * Better PHPUnit test for Board.php
 * Renamed Board Class to Game
 * Made BotInterface
-* Made Game's BOt Injectable. (Dependency Injection)
+* Made Game's Bot Injectable. (Dependency Injection)
+* Fully Completed Test Coverage for Game.php
