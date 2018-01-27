@@ -3,7 +3,8 @@ namespace TicTacToe\API;
 
 use \Silex\Application;
 use \Symfony\Component\HttpFoundation\Request;
-use \TicTacToe\Game\Board;
+use \TicTacToe\Game\Game;
+use \TicTacToe\Game\Bot;
 
 class Routes
 {
@@ -15,7 +16,7 @@ class Routes
 
     public function newgame(Request $request, Application $app, $boardSize)
     {
-        $game = new Board();
+        $game = new Game(new Bot());
         return $app->json($game->newGame($boardSize));
     }
 
@@ -25,7 +26,7 @@ class Routes
         $gameData["board"] = $this->convertFalseStringAnd0ToFalse($request->get('board', false));
         $gameData["boardSize"] = (int)$request->get('boardSize', false);
         $gameData["player"] = $request->get('player', false);
-        $game = new Board();
+        $game = new Game(new Bot());
         return $app->json($game->move($gameData));
     }
 

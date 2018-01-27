@@ -2,20 +2,26 @@
 declare(strict_types=1);
 namespace TicTacToe\Tests;
 
-use PHPUnit\Framework\TestCase;
-use \TicTacToe\Game\Board;
+use \PHPUnit\Framework\TestCase;
+use \TicTacToe\Game\Game;
+use \TicTacToe\Game\Bot;
 
-final class BoardTest extends TestCase
+final class GameTest extends TestCase
 {
+    public function newGameObject()
+    {
+        return new Game(new Bot());
+    }
+
     public function testCreateBoard()
     {
-        $game = new Board();
-        $this->assertInstanceof(Board::class, $game);
+        $game = $this->newGameObject();
+        $this->assertInstanceof(Game::class, $game);
     }
 
     public function testNewGame()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $new = $game->newGame();
         $this->assertEquals(false, $new["winner"]);
         $this->assertEquals(false, $new["over"]);
@@ -25,7 +31,7 @@ final class BoardTest extends TestCase
 
     public function testNewGameWithDefaultBoardSize()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $new = $game->newGame(7);
         $this->assertEquals(false, $new["winner"]);
         $this->assertEquals(false, $new["over"]);
@@ -38,7 +44,7 @@ final class BoardTest extends TestCase
      */
     public function testNewGameWithBadBoardSize(int $size)
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $new = $game->newGame($size);
         $this->assertArrayHasKey('error', $new);
     }
@@ -49,20 +55,20 @@ final class BoardTest extends TestCase
     public function testNewGameWithBadArgument($badArgument)
     {
         $this->expectException(\TypeError::class);
-        $game = new Board();
+        $game = $this->newGameObject();
         $new = $game->newGame($badArgument);
     }
 
     public function testMoveWithNoData()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([]);
         $this->assertArrayHasKey('error', $data);
     }
 
     public function testMoveWithFalseData()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "board" => false,
             "boardSize" => false,
@@ -72,7 +78,7 @@ final class BoardTest extends TestCase
     }
     public function testMoveWithNoBoardSize()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "board" => [[false,false, false], [false, false, false], [false, false, false]],
             "player" => "X"
@@ -82,7 +88,7 @@ final class BoardTest extends TestCase
     }
     public function testMoveWithNoBoard()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "boardSize" => 3,
             "player" => "X"
@@ -93,7 +99,7 @@ final class BoardTest extends TestCase
 
     public function testMoveWithNoPlayer()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "boardSize" => 3,
             "board" => [[false,false, false], [false, false, false], [false, false, false]]
@@ -104,7 +110,7 @@ final class BoardTest extends TestCase
 
     public function testMoveWithNonArrayBoard()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "boardSize" => 5,
             "player" => "X",
@@ -116,7 +122,7 @@ final class BoardTest extends TestCase
 
     public function testMoveWithNoNStringPlayer()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "boardSize" => 3,
             "player" => 54,
@@ -128,7 +134,7 @@ final class BoardTest extends TestCase
 
     public function testMoveWithIncorrectPlayer()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "boardSize" => 3,
             "player" => "addgdg",
@@ -140,7 +146,7 @@ final class BoardTest extends TestCase
 
     public function testMoveWithIncorrectBoardSize()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "boardSize" => 5,
             "player" => "X",
@@ -155,7 +161,7 @@ final class BoardTest extends TestCase
      */
     public function testMoveWithIncorrectBoardData()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "boardSize" => 3,
             "player" => "X",
@@ -166,7 +172,7 @@ final class BoardTest extends TestCase
 
     public function testMoveWithStrangeBoardDataData()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "boardSize" => 3,
             "player" => "X",
@@ -180,7 +186,7 @@ final class BoardTest extends TestCase
 
     public function testMoveWithCorrectData()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "boardSize" => 3,
             "player" => "X",
@@ -194,7 +200,7 @@ final class BoardTest extends TestCase
 
     public function testMoveWithOPlayer()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "boardSize" => 3,
             "player" => "O",
@@ -208,7 +214,7 @@ final class BoardTest extends TestCase
 
     public function testMoveCheckTotalMoves()
     {
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move([
             "boardSize" => 3,
             "player" => "X",
@@ -228,7 +234,7 @@ final class BoardTest extends TestCase
                 [false, false, false]
             ]
         ];
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move($request);
         $this->assertTrue($data["over"]);
         $this->assertEquals("X", $data["winner"]);
@@ -245,7 +251,7 @@ final class BoardTest extends TestCase
                 [false, false, false]
             ]
         ];
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move($request);
         $this->assertTrue($data["over"]);
         $this->assertEquals("O", $data["winner"]);
@@ -262,7 +268,7 @@ final class BoardTest extends TestCase
             "player" => "X",
             "board" => $board
         ];
-        $game = new Board();
+        $game = $this->newGameObject();
         $data = $game->move($request);
         $this->assertTrue($data["over"]);
     }

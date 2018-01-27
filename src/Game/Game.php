@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace TicTacToe\Game;
 
-use \TicTacToe\Game\Bot;
+use TicTacToe\Game\Interfaces\BotInterface;
 
-class Board
+class Game
 {
     private $player;
     private $board;
@@ -12,8 +12,30 @@ class Board
     private $totalMoves;
     private $maxMoves;
     private $over;
-    private $won;
+    private $winner;
 
+    /**
+     * @var BotInterface $bot Holds the Computer AI thatmakes moves againt the player
+     */
+    private $bot;
+
+    public function __construct(BotInterface $bot = null)
+    {
+        if ($bot !== null) {
+            $this->bot = $bot;
+        }
+    }
+
+    /**
+     * Sets Game's Bot.
+     *
+     * @param BotInterface $bot
+     * @return void
+     */
+    public function setBot(BotInterface $bot)
+    {
+        $this->bot = $bot;
+    }
 
     public function newGame(int $size = 3)
     {
@@ -36,8 +58,7 @@ class Board
         if ($this->over == true) {
             return $this->returnState();
         }
-        $bot = new Bot();
-        $move = $bot->makeMove($this->board);
+        $move = $this->bot->makeMove($this->board);
         if (\array_key_exists("error", $move)) {
             return ["error" => "Bot cant make a move!"];
         }
@@ -59,7 +80,7 @@ class Board
         $this->totalMoves = 0;
         $this->maxMoves = $size * $size;
         $this->over = false;
-        $this->won = false;
+        $this->winner = false;
     }
 
     private function increaseTotalMoves(int $amount = 1)
@@ -75,7 +96,7 @@ class Board
         $this->totalMoves = $this->calculateTotalMoves();
         $this->maxMoves = $gameData["boardSize"] * $gameData["boardSize"];
         $this->over = false;
-        $this->won = false;
+        $this->winner = false;
     }
 
     private function newBoard(int $size)
@@ -92,7 +113,7 @@ class Board
     private function returnState()
     {
         $state = [];
-        $state["winner"] = $this->won;
+        $state["winner"] = $this->winner;
         $state["over"] = $this->over;
         $state["player"] = $this->player;
         $state["board"] = $this->board;
@@ -104,7 +125,7 @@ class Board
     private function setGameOverStat($winner)
     {
         $this->over = true;
-        $this->won = $winner;
+        $this->winner = $winner;
     }
 
     private function calculateTotalMoves()

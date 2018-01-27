@@ -1,7 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace TicTacToe\Game;
 
-class Bot
+use TicTacToe\Game\Interfaces\BotInterface;
+
+class Bot implements BotInterface
 {
     private $board;
     private $possibleMoves;
