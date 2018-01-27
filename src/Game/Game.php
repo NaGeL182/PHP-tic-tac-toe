@@ -153,6 +153,9 @@ class Game
 
     private function checkGameDataValidity($gameData)
     {
+        if (empty($gameData)) {
+            return ["error" => "Game data is empty!"];
+        }
         if (!\array_key_exists("boardSize", $gameData)) {
             return ["error" => "No BoardSize"];
         }

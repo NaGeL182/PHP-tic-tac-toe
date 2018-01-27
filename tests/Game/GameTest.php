@@ -5,9 +5,14 @@ namespace TicTacToe\Tests;
 use \PHPUnit\Framework\TestCase;
 use \TicTacToe\Game\Game;
 use \TicTacToe\Game\Bot;
-
+/**
+ * @coversDefaultClass \TicTacToe\Game\Game
+ */
 final class GameTest extends TestCase
 {
+    /**
+     * @covers ::__construct
+     */
     public function testnewGameObject()
     {
         $game = new Game(new Bot());
@@ -32,11 +37,11 @@ final class GameTest extends TestCase
      */
     public function testNewGameWithDefaultBoardSize(Game $game)
     {
-        $new = $game->newGame(7);
+        $new = $game->newGame();
         $this->assertEquals(false, $new["winner"]);
         $this->assertEquals(false, $new["over"]);
         $this->assertEquals("X", $new["player"]);
-        $this->assertCount(7, $new["board"]);
+        $this->assertCount(3, $new["board"]);
     }
 
     /**
@@ -62,15 +67,6 @@ final class GameTest extends TestCase
     /**
      * @depends testnewGameObject
      */
-    public function testMoveWithNoData(Game $game)
-    {
-        $data = $game->move([]);
-        $this->assertArrayHasKey('error', $data);
-    }
-
-    /**
-     * @depends testnewGameObject
-     */
     public function testMoveWithFalseData(Game $game)
     {
         $data = $game->move([
@@ -79,6 +75,16 @@ final class GameTest extends TestCase
             "player" => false
             ]);
         $this->assertArrayHasKey('error', $data);
+    }
+
+    /**
+     * @depends testnewGameObject
+     */
+    public function testMoveWithNoData(Game $game)
+    {
+        $data = $game->move([]);
+        $this->assertArrayHasKey('error', $data);
+        $this->assertEquals('Game data is empty!', $data["error"]);
     }
 
     /**
