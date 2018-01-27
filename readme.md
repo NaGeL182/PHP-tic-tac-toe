@@ -40,6 +40,9 @@ Here i list the places i submited this code to where and when
 * Still need to implement every Route
 
 ### 2018-01-26 v2
-* Ran Cde throught PHP_CodeSniffer with PSR-2 ruleset.
+* Ran Code throught PHP_CodeSniffer with PSR-2 ruleset.
 * Noticed html output in while running phpunit binary...*needs fixing*
 
+### 2018-01-27
+* Renamed namespace
+* Better PHPUnit test for Board.php
