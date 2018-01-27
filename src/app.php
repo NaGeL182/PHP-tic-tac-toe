@@ -9,14 +9,20 @@ $app->register(new \Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/views',
 ));
 
+$app['TicTacToe.Bot'] = function () {
+    return new \TicTacToe\Game\Bot();
+};
+
+$app['TicTacToe.Game'] = function ($app) {
+    return new \TicTacToe\Game\Game($app['TicTacToe.Bot']);
+};
+
+
+
 $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig');
 });
 
-$app->get('/api', 'TicTacToe\\API\\Routes::apiAction');
-$app->get('/newgame/{boardSize}', 'TicTacToe\\API\\Routes::newGameAction')
-    ->value('boardSize', 3)
-    ->assert('boardSize', '\d+');
-$app->post('/move', 'TicTacToe\\API\\Routes::moveAction');
+$app->mount('/', new \TicTacToe\API\Routes());
 
 return $app;

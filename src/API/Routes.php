@@ -3,11 +3,23 @@ namespace TicTacToe\API;
 
 use \Silex\Application;
 use \Symfony\Component\HttpFoundation\Request;
-use \TicTacToe\Game\Game;
-use \TicTacToe\Game\Bot;
+use \Silex\Api\ControllerProviderInterface;
 
-class Routes
+class Routes implements ControllerProviderInterface
 {
+    public function connect(Application $app)
+    {
+        // creates a new controller based on the default route
+        $controllers = $app['controllers_factory'];
+
+        $controllers->get('/api', 'TicTacToe\\API\\Routes::apiAction');
+        $controllers->get('/newgame/{boardSize}', 'TicTacToe\\API\\Routes::newGameAction')
+            ->value('boardSize', 3)
+            ->assert('boardSize', '\d+');
+        $controllers->post('/move', 'TicTacToe\\API\\Routes::moveAction');
+
+        return $controllers;
+    }
 
     public function apiAction(Request $request, Application $app)
     {
@@ -16,7 +28,7 @@ class Routes
 
     public function newGameAction(Request $request, Application $app, $boardSize)
     {
-        $game = new Game(new Bot());
+        $game = $app['TicTacToe.Game'];
         return $app->json($game->newGame($boardSize));
     }
 
@@ -26,7 +38,7 @@ class Routes
         $gameData["board"] = $this->convertFalseStringAnd0ToFalse($request->get('board', false));
         $gameData["boardSize"] = (int)$request->get('boardSize', false);
         $gameData["player"] = $request->get('player', false);
-        $game = new Game(new Bot());
+        $game = $app['TicTacToe.Game'];
         return $app->json($game->move($gameData));
     }
 
