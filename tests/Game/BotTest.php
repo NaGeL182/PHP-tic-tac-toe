@@ -2,9 +2,12 @@
 
 namespace TicTacToe\Tests;
 
-use PHPUnit\Framework\TestCase;
+use \PHPUnit\Framework\TestCase;
 use \TicTacToe\Game\Bot;
 
+/**
+ * @coversDefaultClass \TicTacToe\Game\Bot
+ */
 final class BotTest extends TestCase
 {
     /**
@@ -13,6 +16,40 @@ final class BotTest extends TestCase
     public function testDataGivenToBotReturnCorrectMove($board)
     {
         $board = $board;
+        $bot = new Bot();
+        $move = $bot->makeMove($board);
+        $this->assertInternalType('array', $move);
+        $this->assertInternalType('int', $move[0]);
+        $this->assertInternalType('int', $move[1]);
+        $this->assertFalse($board[$move[0]][$move[1]]);
+    }
+
+    /**
+     * @covers ::calculateMove
+     */
+    public function testNoMovesLeft()
+    {
+        $board = [
+            ["O","O", "X"],
+            ["X", "X", "O"],
+            ["O", "X", "X"]
+        ];
+        $bot = new Bot();
+        $move = $bot->makeMove($board);
+        $this->assertArrayHasKey("error", $move);
+        $this->assertEquals("no moves left", $move["error"]);
+    }
+
+    /**
+     * @covers ::calculateMove
+     */
+    public function testOneMovesLeft()
+    {
+        $board = [
+            ["O", false, "X"],
+            ["X", "X", "O"],
+            ["O", "X", "X"]
+        ];
         $bot = new Bot();
         $move = $bot->makeMove($board);
         $this->assertInternalType('array', $move);

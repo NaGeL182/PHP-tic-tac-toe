@@ -9,18 +9,18 @@ use \TicTacToe\Game\Bot;
 class Routes
 {
 
-    public function api(Request $request, Application $app)
+    public function apiAction(Request $request, Application $app)
     {
         return $app->json(['version' => '1.0.0']);
     }
 
-    public function newgame(Request $request, Application $app, $boardSize)
+    public function newGameAction(Request $request, Application $app, $boardSize)
     {
         $game = new Game(new Bot());
         return $app->json($game->newGame($boardSize));
     }
 
-    public function move(Request $request, Application $app)
+    public function moveAction(Request $request, Application $app)
     {
         $gameData = [];
         $gameData["board"] = $this->convertFalseStringAnd0ToFalse($request->get('board', false));

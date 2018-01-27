@@ -5,6 +5,7 @@ namespace TicTacToe\Tests;
 use \PHPUnit\Framework\TestCase;
 use \TicTacToe\Game\Game;
 use \TicTacToe\Game\Bot;
+
 /**
  * @coversDefaultClass \TicTacToe\Game\Game
  */

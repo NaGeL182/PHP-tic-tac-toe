@@ -11,7 +11,7 @@ final class IndexTest extends WebTestCase
     public function createApplication()
     {
         // app.php must return an Application instance
-        $app = require __DIR__.'/../src/index.php';
+        $app = require __DIR__.'/../src/app.php';
         $app["debug"] = true;
         unset($app['exception_handler']);
         return $app;
