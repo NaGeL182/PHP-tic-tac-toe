@@ -1,5 +1,5 @@
 <?php
-namespace doclerPHP;
+namespace TicTacToe;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
@@ -13,10 +13,10 @@ $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig');
 });
 
-$app->get('/api', 'doclerPHP\\API\\Routes::api');
-$app->get('/newgame/{boardSize}', 'doclerPHP\\API\\Routes::newgame')
+$app->get('/api', 'TicTacToe\\API\\Routes::api');
+$app->get('/newgame/{boardSize}', 'TicTacToe\\API\\Routes::newgame')
     ->value('boardSize', 3)
     ->assert('boardSize', '\d+');
-$app->post('/move', 'doclerPHP\\API\\Routes::move');
+$app->post('/move', 'TicTacToe\\API\\Routes::move');
 $app->run();
 return $app;

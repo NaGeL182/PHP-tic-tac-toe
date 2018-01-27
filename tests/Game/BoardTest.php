@@ -1,8 +1,9 @@
 <?php
-namespace doclerPHP\Tests;
+declare(strict_types=1);
+namespace TicTacToe\Tests;
 
 use PHPUnit\Framework\TestCase;
-use \doclerPHP\Game\Board;
+use \TicTacToe\Game\Board;
 
 final class BoardTest extends TestCase
 {
@@ -22,7 +23,7 @@ final class BoardTest extends TestCase
         $this->assertCount(3, $new["board"]);
     }
 
-    public function testNewGameWithBoardSize()
+    public function testNewGameWithDefaultBoardSize()
     {
         $game = new Board();
         $new = $game->newGame(7);
@@ -32,18 +33,24 @@ final class BoardTest extends TestCase
         $this->assertCount(7, $new["board"]);
     }
 
-    public function testNewGameWithBadBoardSize()
+    /**
+     * @dataProvider badBoardSizeProvider
+     */
+    public function testNewGameWithBadBoardSize(int $size)
     {
         $game = new Board();
-        $new = $game->newGame(-7);
+        $new = $game->newGame($size);
         $this->assertArrayHasKey('error', $new);
     }
 
-    public function testNewGameWithBadArgument()
+    /**
+     * @dataProvider invalidBoardSizeProvider
+     */
+    public function testNewGameWithBadArgument($badArgument)
     {
         $this->expectException(\TypeError::class);
         $game = new Board();
-        $new = $game->newGame("badargument");
+        $new = $game->newGame($badArgument);
     }
 
     public function testMoveWithNoData()
@@ -71,6 +78,7 @@ final class BoardTest extends TestCase
             "player" => "X"
             ]);
         $this->assertArrayHasKey('error', $data);
+        $this->assertEquals('No BoardSize', $data["error"]);
     }
     public function testMoveWithNoBoard()
     {
@@ -80,6 +88,7 @@ final class BoardTest extends TestCase
             "player" => "X"
             ]);
         $this->assertArrayHasKey('error', $data);
+        $this->assertEquals('No Board', $data["error"]);
     }
 
     public function testMoveWithNoPlayer()
@@ -90,39 +99,31 @@ final class BoardTest extends TestCase
             "board" => [[false,false, false], [false, false, false], [false, false, false]]
             ]);
         $this->assertArrayHasKey('error', $data);
+        $this->assertEquals('No player', $data["error"]);
     }
 
-    public function testMoveWithIncorrectBoardSize()
+    public function testMoveWithNonArrayBoard()
     {
         $game = new Board();
         $data = $game->move([
             "boardSize" => 5,
             "player" => "X",
+            "board" => "",
+            ]);
+        $this->assertArrayHasKey('error', $data);
+        $this->assertEquals('board is not an arrray!', $data["error"]);
+    }
+
+    public function testMoveWithNoNStringPlayer()
+    {
+        $game = new Board();
+        $data = $game->move([
+            "boardSize" => 3,
+            "player" => 54,
             "board" => [[false,false, false], [false, false, false], [false, false, false]]
             ]);
         $this->assertArrayHasKey('error', $data);
-    }
-
-    public function testMoveWithIncorrectBoardOneExtraField()
-    {
-        $game = new Board();
-        $data = $game->move([
-            "boardSize" => 3,
-            "player" => "X",
-            "board" => [[false,false, false], [false, false, false], [false, false, false, false]]
-            ]);
-        $this->assertArrayHasKey('error', $data);
-    }
-
-    public function testMoveWithIncorrectBoardOneExtraRow()
-    {
-        $game = new Board();
-        $data = $game->move([
-            "boardSize" => 3,
-            "player" => "X",
-            "board" => [[false,false, false], [false, false, false], [false, false, false], [false, false, false]]
-            ]);
-        $this->assertArrayHasKey('error', $data);
+        $this->assertEquals('player is not an string!', $data["error"]);
     }
 
     public function testMoveWithIncorrectPlayer()
@@ -134,6 +135,47 @@ final class BoardTest extends TestCase
             "board" => [[false,false, false], [false, false, false], [false, false, false]]
             ]);
         $this->assertArrayHasKey('error', $data);
+        $this->assertEquals('player is not a valid mark! (X, O)', $data["error"]);
+    }
+
+    public function testMoveWithIncorrectBoardSize()
+    {
+        $game = new Board();
+        $data = $game->move([
+            "boardSize" => 5,
+            "player" => "X",
+            "board" => [[false,false, false], [false, false, false], [false, false, false]]
+            ]);
+        $this->assertArrayHasKey('error', $data);
+        $this->assertEquals('the board size and boardSize is not equal!', $data["error"]);
+    }
+
+    /**
+     * @dataProvider incorrectBoardDataProvider
+     */
+    public function testMoveWithIncorrectBoardData()
+    {
+        $game = new Board();
+        $data = $game->move([
+            "boardSize" => 3,
+            "player" => "X",
+            "board" => [[false,false, false], [false, false, false], [false, false, false, false]]
+            ]);
+        $this->assertArrayHasKey('error', $data);
+    }
+
+    public function testMoveWithStrangeBoardDataData()
+    {
+        $game = new Board();
+        $data = $game->move([
+            "boardSize" => 3,
+            "player" => "X",
+            "board" => [["X","foo", "X"], ["O", "bar", false], ["X", "buzz", false]]
+        ]);
+        $this->assertEquals(false, $data["winner"]);
+        $this->assertEquals(false, $data["over"]);
+        $this->assertEquals("X", $data["player"]);
+        $this->assertCount(3, $data["board"]);
     }
 
     public function testMoveWithCorrectData()
@@ -147,6 +189,20 @@ final class BoardTest extends TestCase
         $this->assertEquals(false, $data["winner"]);
         $this->assertEquals(false, $data["over"]);
         $this->assertEquals("X", $data["player"]);
+        $this->assertCount(3, $data["board"]);
+    }
+
+    public function testMoveWithOPlayer()
+    {
+        $game = new Board();
+        $data = $game->move([
+            "boardSize" => 3,
+            "player" => "O",
+            "board" => [[false,false, false], [false, false, false], [false, false, false]]
+        ]);
+        $this->assertEquals(false, $data["winner"]);
+        $this->assertEquals(false, $data["over"]);
+        $this->assertEquals("O", $data["player"]);
         $this->assertCount(3, $data["board"]);
     }
 
@@ -209,6 +265,41 @@ final class BoardTest extends TestCase
         $game = new Board();
         $data = $game->move($request);
         $this->assertTrue($data["over"]);
+    }
+
+    public function incorrectBoardDataProvider()
+    {
+        return [
+            "extra_field" => [
+                [[false,false, false], [false, false, false], [false, false, false, false]]
+            ],
+            "extra_row" => [
+                [[false,false, false], [false, false, false], [false, false, false], [false, false, false]]
+            ],
+            "extra_column" => [
+                [[false,false, false, false], [false, false, false, false], [false, false, false, false]]
+            ]
+        ];
+    }
+
+    public function invalidBoardSizeProvider()
+    {
+        return [
+            "string" => ["this isa bad string"],
+            "array" => [[4]],
+            "float" => [4.5],
+            "object" => [new \stdClass()],
+        ];
+    }
+
+    public function badBoardSizeProvider()
+    {
+        return [
+            "2" => [2],
+            "1" => [1],
+            "0" => [0],
+            "minus5" => [-5],
+        ];
     }
 
     public function boardProvider()

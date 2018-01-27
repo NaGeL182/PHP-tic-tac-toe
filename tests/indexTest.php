@@ -1,5 +1,5 @@
 <?php
-namespace doclerPHP\Tests;
+namespace TicTacToe\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Silex\WebTestCase;

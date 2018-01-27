@@ -1,7 +1,8 @@
 <?php
-namespace doclerPHP\Game;
+declare(strict_types=1);
+namespace TicTacToe\Game;
 
-use \doclerPHP\Game\Bot;
+use \TicTacToe\Game\Bot;
 
 class Board
 {
@@ -140,7 +141,7 @@ class Board
             return ["error" => "player is not an string!"];
         }
         if (mb_strtolower($gameData["player"]) != "x" && mb_strtolower($gameData["player"]) != "o") {
-            return ["error" => "playeris nota valid mark! (X, O)"];
+            return ["error" => "player is not a valid mark! (X, O)"];
         }
         if ($gameData["boardSize"] != \count($gameData["board"])) {
             return ["error" => "the board size and boardSize is not equal!"];

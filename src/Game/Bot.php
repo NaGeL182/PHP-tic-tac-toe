@@ -1,5 +1,5 @@
 <?php
-namespace doclerPHP\Game;
+namespace TicTacToe\Game;
 
 class Bot
 {

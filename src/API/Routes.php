@@ -1,9 +1,9 @@
 <?php
-namespace doclerPHP\API;
+namespace TicTacToe\API;
 
 use \Silex\Application;
 use \Symfony\Component\HttpFoundation\Request;
-use \doclerPHP\Game\Board;
+use \TicTacToe\Game\Board;
 
 class Routes
 {

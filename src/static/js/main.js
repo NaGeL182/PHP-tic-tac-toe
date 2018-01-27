@@ -80,7 +80,6 @@ function ajaxStartNewGame(){
     gameMessage({"message" :"Please wait..."});
     $.get("/newgame/" + boardSize)
         .done(function(data){
-            console.log(data);
             if (data.error !== undefined) {
                 gameError(data);
                 return;
@@ -109,7 +108,6 @@ function ajaxSendData(){
             player: gameData.player
         })
         .done(function(data){
-            console.log(data);
             if (data.error !== undefined) {
                 gameError(data);
                 return;

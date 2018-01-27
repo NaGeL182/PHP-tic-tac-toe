@@ -1,9 +1,9 @@
 <?php
 
-namespace doclerPHP\Tests;
+namespace TicTacToe\Tests;
 
 use PHPUnit\Framework\TestCase;
-use \doclerPHP\Game\Bot;
+use \TicTacToe\Game\Bot;
 
 final class BotTest extends TestCase
 {
