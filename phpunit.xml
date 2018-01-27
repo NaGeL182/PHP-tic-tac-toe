@@ -7,20 +7,24 @@
             convertWarningsToExceptions="true"
             processIsolation="false"
             stopOnFailure="false"
+            beStrictAboutOutputDuringTests="true"
 >
     <testsuites>
-        <testsuite name="Docler PHP">
+        <testsuite name="TicTacToe">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
         <directory suffix=".php">src</directory>
+        <exclude>
+            <file>src/index.php</file>
+        </exclude>
         </whitelist>
     </filter>
     <logging>
         <log type="coverage-html" target="tests/report" lowUpperBound="35"
             highLowerBound="70"/>
-        <log type="testdox-html" target="tests/report/doc/report.html"/>
+        <log type="testdox-html" target="tests/report/doc/index.html"/>
     </logging>
 </phpunit>

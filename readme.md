@@ -48,3 +48,6 @@ Here i list the places i submited this code to where and when
 * Made BotInterface
 * Made Game's Bot Injectable. (Dependency Injection)
 * Fully Completed Test Coverage for Game.php
+* [FIX] Html output in PHPUnit test
+    When PHPUnit ran the test it read and ran all the whitelisted files... including index.php which returned HTML and printed it.
+* Fully Completed Test Coverage for Bot.php
