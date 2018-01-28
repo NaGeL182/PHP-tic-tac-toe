@@ -4,7 +4,6 @@ Written by Adrián Muszik for practice and job application. The goal was in [thi
 
 Docker link: [Docker image](https://hub.docker.com/r/nagel182/phptictactoe/)
 
-
 ## Requirements
 
 - PHP7.2
@@ -50,7 +49,7 @@ Here i list the places i submited this code to where and when
 ### 2018-01-26
 
 - Added Code Coverage report to phpunit.xml
-    it will now put html report under tests/report
+  It will now put html report under tests/report
 - Found a better way to test Silex app that includes the test coverage
 - Still need to implement every Route
 - Ran Code throught PHP_CodeSniffer with PSR-2 ruleset.
@@ -65,7 +64,7 @@ Here i list the places i submited this code to where and when
 - Made Game's Bot Injectable. (Dependency Injection)
 - Fully Completed Test Coverage for Game.php
 - [FIX] Html output in PHPUnit test  
-    When PHPUnit ran the test it read and ran all the whitelisted files... including index.php which returned HTML and printed it.
+  When PHPUnit ran the test it read and ran all the whitelisted files... including index.php which returned HTML and printed it.
 - Fully Completed Test Coverage for Bot.php
 
 ### 2018-01-28
@@ -77,3 +76,5 @@ Here i list the places i submited this code to where and when
 - [FIX] you could place markers on already placed fields.
 - Fully Completed Test Coverage for RESTController.php
 - 100% PHP test Coverage!
+- Started on smarter Bot
+  - created Board class wich the Bot Can access.

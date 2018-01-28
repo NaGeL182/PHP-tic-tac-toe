@@ -4,5 +4,5 @@ namespace TicTacToe\Game\Interfaces;
 
 interface BotInterface
 {
-    public function makeMove(array $board);
+    public function makeMove(array $board) : array;
 }

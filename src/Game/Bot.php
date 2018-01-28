@@ -6,11 +6,28 @@ use TicTacToe\Game\Interfaces\BotInterface;
 
 class Bot implements BotInterface
 {
+    public const DIFFICULTY_RANDOM = "random";
+    public const DIFFICULTY_BEGINNER = "beginner";
+    public const DIFFICULTY_NORMAL = "normal";
+    public const DIFFICULTY_EXPERT = "expert";
+
+    private const DIFFICULTIES = [
+        self::DIFFICULTY_RANDOM,
+        self::DIFFICULTY_BEGINNER,
+        self::DIFFICULTY_NORMAL,
+        self::DIFFICULTY_EXPERT,
+    ];
+
     private $board;
     private $possibleMoves;
     private $chosenMove;
 
-    public function makeMove(array $board)
+   /* public function __construct(string $Botmarker = null, string $playerMarker = null, $)
+    {
+
+    }*/
+
+    public function makeMove(array $board): array
     {
         $this->board = $board;
         $this->analyzeBoard();
