@@ -9,6 +9,7 @@ Docker link: [Docker image](https://hub.docker.com/r/nagel182/phptictactoe/)
 
 - PHP7.2
 - XDebug (for PHPUnit Code Coverage)
+- WebServer with rewrite mode activated
 
 ## Before running
 
