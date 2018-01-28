@@ -36,13 +36,23 @@ final class GameTest extends TestCase
     /**
      * @depends testnewGameObject
      */
-    public function testNewGameWithDefaultBoardSize(Game $game)
+    public function testNewGameWithDefaultBoardSizeAndOPlayer(Game $game)
     {
-        $new = $game->newGame();
+        $new = $game->newGame(3, "O");
         $this->assertEquals(false, $new["winner"]);
         $this->assertEquals(false, $new["over"]);
-        $this->assertEquals("X", $new["player"]);
+        $this->assertEquals("O", $new["player"]);
         $this->assertCount(3, $new["board"]);
+    }
+
+    /**
+     * @depends testnewGameObject
+     */
+    public function testNewGameWithDefaultBoardSizeAndNonesensePlayer(Game $game)
+    {
+        $data = $game->newGame(3, "asd");
+        $this->assertArrayHasKey('error', $data);
+        $this->assertEquals('player is not a valid mark! (X, O)', $data["error"]);
     }
 
     /**
@@ -137,7 +147,7 @@ final class GameTest extends TestCase
             "board" => "",
             ]);
         $this->assertArrayHasKey('error', $data);
-        $this->assertEquals('board is not an arrray!', $data["error"]);
+        $this->assertEquals('board is not an array!', $data["error"]);
     }
 
     /**
@@ -339,13 +349,26 @@ final class GameTest extends TestCase
     {
         return [
             "extra_field" => [
-                [[false,false, false], [false, false, false], [false, false, false, false]]
+                [
+                    [false,false, false],
+                    [false, false, false],
+                    [false, false, false, false]
+                ]
             ],
             "extra_row" => [
-                [[false,false, false], [false, false, false], [false, false, false], [false, false, false]]
+                [
+                    [false,false, false],
+                    [false, false, false],
+                    [false, false, false],
+                    [false, false, false]
+                ]
             ],
             "extra_column" => [
-                [[false,false, false, false], [false, false, false, false], [false, false, false, false]]
+                [
+                    [false,false, false, false],
+                    [false, false, false, false],
+                    [false, false, false, false]
+                ]
             ]
         ];
     }

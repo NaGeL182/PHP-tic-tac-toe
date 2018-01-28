@@ -5,18 +5,17 @@ use \Silex\Application;
 use \Symfony\Component\HttpFoundation\Request;
 use \Silex\Api\ControllerProviderInterface;
 
-class Routes implements ControllerProviderInterface
+class RESTController implements ControllerProviderInterface
 {
     public function connect(Application $app)
     {
         // creates a new controller based on the default route
         $controllers = $app['controllers_factory'];
 
-        $controllers->get('/api', 'TicTacToe\\API\\Routes::apiAction');
-        $controllers->get('/newgame/{boardSize}', 'TicTacToe\\API\\Routes::newGameAction')
-            ->value('boardSize', 3)
-            ->assert('boardSize', '\d+');
-        $controllers->post('/move', 'TicTacToe\\API\\Routes::moveAction');
+        $controllers->get('/api', 'TicTacToe\\API\\RESTController::apiAction');
+        $controllers->match('/newgame', 'TicTacToe\\API\\RESTController::newGameAction')
+            ->method('GET|POST');
+        $controllers->post('/move', 'TicTacToe\\API\\RESTController::moveAction');
 
         return $controllers;
     }
@@ -26,10 +25,10 @@ class Routes implements ControllerProviderInterface
         return $app->json(['version' => '1.0.0']);
     }
 
-    public function newGameAction(Request $request, Application $app, $boardSize)
+    public function newGameAction(Request $request, Application $app)
     {
         $game = $app['TicTacToe.Game'];
-        return $app->json($game->newGame($boardSize));
+        return $app->json($game->newGame($request->get('boardSize', 3), $request->get('player', "X")));
     }
 
     public function moveAction(Request $request, Application $app)
@@ -44,6 +43,9 @@ class Routes implements ControllerProviderInterface
 
     private function convertFalseStringAnd0ToFalse($board)
     {
+        if (!\is_array($board)) {
+            return $board;
+        }
         foreach ($board as $x => $row) {
             foreach ($row as $y => $field) {
                 if ($field === "false" || $field === "" || $field ===  0 || $field === "0") {

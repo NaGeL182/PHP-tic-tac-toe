@@ -23,6 +23,6 @@ $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig');
 });
 
-$app->mount('/', new \TicTacToe\API\Routes());
+$app->mount('/', new \TicTacToe\API\RESTController());
 
 return $app;

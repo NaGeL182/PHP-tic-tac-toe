@@ -47,12 +47,16 @@ class Game
         return $this->bot;
     }
 
-    public function newGame(int $size = 3)
+    public function newGame(int $size = 3, string $player = "X")
     {
         if ($size < 3) {
             return ["error" => "Board Size can't be smaller than 3"];
         }
-        $this->start($size);
+        $playerValidity = $this->checkPlayerValidity($player);
+        if ($playerValidity !== true) {
+            return $playerValidity;
+        }
+        $this->start($size, $player);
         $this->newBoard($size);
         return $this->returnState();
     }
@@ -82,9 +86,9 @@ class Game
         return $this->returnState();
     }
 
-    private function start($size)
+    private function start($size, $player)
     {
-        $this->player = "X";
+        $this->player = $player;
         $this->board = [];
         $this->boardSize = $size;
         $this->totalMoves = 0;
@@ -151,6 +155,17 @@ class Game
         return $total;
     }
 
+    private function checkPlayerValidity($player)
+    {
+        if (!\is_string($player)) {
+            return ["error" => "player is not an string!"];
+        }
+        if (\mb_strtolower($player) != "x" && \mb_strtolower($player) != "o") {
+            return ["error" => "player is not a valid mark! (X, O)"];
+        }
+        return true;
+    }
+
     private function checkGameDataValidity($gameData)
     {
         if (empty($gameData)) {
@@ -169,13 +184,11 @@ class Game
             return ["error" => "boardSize is not a number!"];
         }
         if (!\is_array($gameData["board"])) {
-            return ["error" => "board is not an arrray!"];
+            return ["error" => "board is not an array!"];
         }
-        if (!\is_string($gameData["player"])) {
-            return ["error" => "player is not an string!"];
-        }
-        if (mb_strtolower($gameData["player"]) != "x" && mb_strtolower($gameData["player"]) != "o") {
-            return ["error" => "player is not a valid mark! (X, O)"];
+        $playerValidity = $this->checkPlayerValidity($gameData["player"]);
+        if ($playerValidity !== true) {
+            return $playerValidity;
         }
         if ($gameData["boardSize"] != \count($gameData["board"])) {
             return ["error" => "the board size and boardSize is not equal!"];

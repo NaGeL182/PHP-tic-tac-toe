@@ -72,13 +72,16 @@ function ajaxStartNewGame(){
     "use strict";
     clearMessages();
     var boardSize = $("#gridSize").val();
-    if (boardSize === undefined)
-    {
+    if (boardSize === undefined) {
         gameError({"error" : "There is no gridSize input. The page may have loaded incorectly. please refresh!"});
         return;
     }
+    if (boardSize === "") {
+        gameError({"error" : "There is no gridSize input."});
+        return;
+    }
     gameMessage({"message" :"Please wait..."});
-    $.get("/newgame/" + boardSize)
+    $.post("/newgame", { boardSize : boardSize})
         .done(function(data){
             if (data.error !== undefined) {
                 gameError(data);
@@ -142,10 +145,14 @@ function setupBoardEvents() {
         var $tds = $("td");
         $tds.click(function() {
             var self = $(this);
-            var coord = self.data("coordinates");
-            updateBoardData(coord, gameData.player);
-            ajaxSendData();
-            return;
+            if (!self.has("img").length) {
+                var coord = self.data("coordinates");
+                updateBoardData(coord, gameData.player);
+                ajaxSendData();
+                return;
+            } else {
+                return;
+            }
         });
     }
     return;
@@ -162,12 +169,12 @@ function drawBoard() {
             var $td = $("<td></td>");
             $td.data("coordinates", coordinates);
             if (gameData.board[i][j] !== false) {
-                $td.append(getMarkHTML(gameData.board[i][j])); 
+                $td.append(getMarkHTML(gameData.board[i][j]));
             }
             $tr.append($td);
         }
         $table.append($tr);
-        
+
     }
     $game.append($table);
     setupBoardEvents();
@@ -225,11 +232,16 @@ function displayStatus() {
         $message = $("<h3>It's your turn. You are: " + gameData.player + "</h3>");
     } else if (State === gameStates.gameOver) {
         $message = $("<div><h3>Game over!</h3></div>");
-        var winnerTitle = gameData.winner + " won!";
-        if (gameData.player === gameData.winner) {
-            winnerTitle += "You have won! Congratualtion!";
+        var winnerTitle;
+        if (gameData.winner !== "tie") {
+            winnerTitle = gameData.winner + " won!";
+            if (gameData.player === gameData.winner) {
+                winnerTitle += "You have won! Congratualtion!";
+            } else {
+                winnerTitle += "You have lost! Better luck next time:)!";
+            }
         } else {
-            winnerTitle += "You have lost! Better luck next time:)!";
+            winnerTitle = "It's a Tie! Better luck next time:)!";
         }
         var $winner = $("<h4>" + winnerTitle + "</h4>");
         $message.append($winner);
@@ -270,7 +282,7 @@ function setupGameOver(){
 
 function setupPage() {
     "use strict";
-    
+
     if (State === gameStates.noGame) {
         setupNewGame();
         return;
