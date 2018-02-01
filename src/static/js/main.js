@@ -1,3 +1,4 @@
+/*global $ */
 var gameStates = {
     noGame : "nogame",
     gameInProgress : "gameinprogress",
@@ -126,7 +127,6 @@ function ajaxSendData(){
             return;
         })
         .fail(function(error) {
-            console.log(error);
             if (error.status === 404) {
                 gameError({"error" : "Bad gridSize was given. GridSize must be a number, minimum 3!"});
                 return;
